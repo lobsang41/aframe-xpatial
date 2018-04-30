@@ -1,0 +1,14 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl baked_Material_#70
+Ns 19.607843
+Ka 1.000000 1.000000 1.000000
+Kd 0.087843 0.087843 0.555294
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd Plane001CompleteMap.jpg
+map_d Plane001CompleteMap.jpg

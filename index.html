@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, World! - A-Frame</title>
+    <meta name="description" content="a-frame placeholder">
+     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+     <script src="https://npmcdn.com/aframe-animation-component@3.0.1"></script>
+     <script src="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script>
+     <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v4.0.3/dist/aframe-extras.min.js"></script>
+     <script src="https://rawgit.com/gasolin/aframe-href-component/master/dist/aframe-href-component.min.js"></script>
+     <script src="js/interaction.js"></script>
+     <script src="js/aframe-effects.min.js"></script>
+
+  </head>
+
+
+
+  <body>
+    <script type="script-effect" id="customFilter" data-defaults="tDiffuse 0.3 0.3 1." data-diffuse>
+        void $main(inout vec4 c, vec4 o, vec2 uv, float d){
+            float t = time * mix(1., 1000., abs(sin(time * 10. + uv.x)));
+            uv = vec2(uv.x + resolution.z * sin(t * c.r + c.b), uv.y - resolution.w * cos(t * c.b + c.r));
+            c.rgb += smoothstep(0.3, 0.9, texture2D($0,uv).rgb  ) * mix( $1, $2, abs(sin(time * $3))) ;
+        }
+    </script>
+
+    <script type="script-effect" id="blendOutline" data-diffuse>
+        void $main(inout vec4 c, vec4 o, vec2 uv, float d){
+            c.rgb = mix(c.rgb, o.rgb, smoothstep(0.1,0.3,o.a));
+        }
+    </script>
+
+    <script type="script-effect" id="add" data-defaults="bloom_texture bloom_intensity" data-diffuse>
+        void $main(inout vec4 c, vec4 o, vec2 uv, float d){
+            c.rgb += pow(texture2D($0, uv).rgb,vec3(2.)) * $1;
+        }
+    </script>
+
+
+<!--
+antialias="false"
+effects=" colors, outline.sobel?, #blendOutline, bloom, film,  godrays, glitch,  fxaa"
+colors="mode:hqprtom; mul: 0.66 0.5 0.66; pow: 1 1.33 1.66; quant: 0.3 0.3 0.1; orig: 0.33 0.66 0.66"
+bloom="filter: bloom!, bloom.filter, #customFilter(bloom_texture 0.3 0.6 0.5); strength: 0.1; radius:1.2"
+fxaa="true"
+godrays="src: #sun; threshold: 0. 0.33; intensity: 1000"
+fog="type: exponential; color: #280441; density: .0002"
+-->
+
+
+<a-scene
+
+
+>
+      <a-assets>
+        <a-asset-item id="earth-mtl" src="assets/models/Earth_1227.mtl"></a-asset-item>
+        <a-asset-item id="earth-obj" src="assets/models/Earth_1227.obj"></a-asset-item>
+        <a-asset-item id="cearth-mtl" src="assets/models/CHAHIN_EARTH.mtl"></a-asset-item>
+        <a-asset-item id="cearth-obj" src="assets/models/CHAHIN_EARTH.obj"></a-asset-item>
+        <a-asset-item id="dummy-mtl" src="/assets/models/Planeta_Turismo.mtl"></a-asset-item>
+        <a-asset-item id="dummy-obj" src="/assets/models/Planeta_Turismo.obj"></a-asset-item>
+        <a-asset-item id="dummy-dae" src="/assets/models/dummy.dae"></a-asset-item>
+        <a-asset-item id="corridor-obj" src="/assets/models/ce_corridor03.obj"></a-asset-item>
+        <img id="dummy-tex1" src="/assets/models/Iluminacion_Planeta.jpg"></img>
+        <img id="dummy-tex" src="/assets/models/Iluminacion_Planeta01.jpg"></img>
+        <img id="sky" src="assets/textures/stars-1.jpg"/>
+        <img id="iluminacion_planetacolor_de_la_superficie" src="https://ucarecdn.com/62518819-07ab-4eb9-8511-69eec763b961/" crossorigin="anonymous">
+      </a-assets>
+
+      <!-- 360-degree image. -->
+
+
+
+
+
+
+  <a-obj-model id= "exampleEarth"obj-model="obj: #dummy-obj;"
+
+              animation__base="property: rotation; from: 0 0 20; to:  0 360 20; dur: 100000; easing: linear; loop:true"
+              animation__fade="delay: 1000; dur:1500;property:opacity;easing:linear;from:0;to:1;"
+              material = "opacity : 0;roughness: .4; metalness: 0.1; src : #dummy-tex ; ambientOcclusionMap: #dummy-tex1"
+              scale=".0009 .0009  .0009 " position ="0 -0.3 -1.5"
+              scale-on-mouseenter="to: .001 .001 .001"
+              scale-on-mouseleave="to: .0009 .0009 .0009"
+              shadow="cast: false">
+
+                        <a-animation attribute="position"
+                          to="0 -0.25 -1.5"
+                          direction="alternate"
+                          dur="2000"
+                          repeat="indefinite">
+                        </a-animation>
+  </a-obj-model>
+
+
+
+      </a-box>
+
+<!--
+      <a-obj-model obj-model="obj: #cearth-obj; mtl: #cearth-mtl"  scale=".4 .4 .4" position ="0 -4.182 -0.776"
+      animation="property: rotation; from: 0 0 0; to:  0 0 360; dur: 100000; easing: linear;
+                                  loop: true; "
+                                  shadow="cast: true"
+                                  >
+
+
+                                  material = "shader: flat; src: #dummy-tex; roughness: .4; metalness: .5"
+                                -->
+                                </a-obj-model>
+
+      <a-obj-model obj-model="obj: #dummy-obj;"
+                  material = " roughness: .4; metalness: .1 ; src : #dummy-tex; ambientOcclusionMap: #dummy-tex1"
+                  animation="property: rotation; from: 0 0 20; to:  0 360 20; dur: 100000; easing: linear; loop:true"
+                  scale=".02 .02 .02" position ="10.000 -2.622 -17.569"
+                  shadow="cast: false">
+
+      </a-obj-model>
+      <a-obj-model obj-model="obj: #corridor-obj;"
+                  material = " roughness: .4; metalness: .1 ; src : #dummy-tex; ambientOcclusionMap: #dummy-tex1"
+                  scale=".9 .9 .9" position ="-0.127 0.301 -1.854" rotation = "0 -90.349"
+                  shadow="cast: false">
+
+      </a-obj-model>
+
+
+
+
+      <a-entity  id ="#EarthLight"
+                 light="type: point;
+                 castShadow: false;
+                 intensity: 0.9;
+                 decay: .1;
+                 distance: 15."
+                 position = ".838 .644 -7.028"></a-entity>
+                 <a-entity  id ="#EarthLight2"
+                            light="type: point;
+                            color: #800080;
+                            castShadow: false;
+                            intensity: 1.0;
+                            decay: .4;
+                            distance: 15."
+                            position = "8.852 -1.347 -4.357"></a-entity>
+
+                            <a-entity  id ="#room"
+                                       light="type: point;
+                                       color: #FFF;
+                                       castShadow: false;
+                                       intensity: 1;
+                                       decay: 0.8;
+                                       distance: 8."
+                                       position = "-0.124 0 -0.65"></a-entity>
+
+<!-- light-->
+
+    <a-entity light="type: ambient; intensity: 0.7;"></a-entity>
+     <a-entity  id ="#sun"
+                light="type: directional;
+                castShadow: true;
+                intensity: 2;
+                color:#fefeb3"
+                position = "-6. 3.771 -10.8"
+                rotation = "0 2.2 0.34"
+                ></a-entity>
+
+
+
+  <!-- -->
+
+    <a-gui-flex-container
+                  flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1" opacity="0.0" width=".5" height=".5"
+                  position="0 0.3 -2.0" rotation="0 0 0" scale = ".3 .3 .3"
+                >
+                <a-gui-button
+              		width=".75" height="0.75"
+              		onclick="buttonActionFunction" key-code="32"
+              		value="VR"
+              		font-family="Helvetica"
+                  font-color="#a6b9e6"
+                  background-color = "#132139"
+              		margin="0 0 0.05 0"
+                  href="https://github.com/gasolin/aframe-href-component"
+              	>
+              	</a-gui-button>
+
+
+                <a-animation attribute="rotation" id="hideButton"
+                    begin="ClickButton"
+                    dur="1000"
+                    fill="forwards"
+                    to="0 90 0"></a-animation>
+                    <a-animation attribute="scale" id="flatButton"
+                        begin="ClickButton"
+                        dur="1000"
+                        fill="forwards"
+                        to=".7 .7 0"></a-animation>
+      </a-gui-flex-container>
+
+          <script>
+
+          function loadURI(uri)
+          {
+              window.open(uri,"_self");
+          }
+
+
+              window.buttonActionFunction = function(){
+                var animateButtonClick = document.getElementById("hideButton");
+                var animateButtonFlat = document.getElementById("flatButton");
+                animateButtonClick.emit('ClickButton');
+                animateButtonFlat.emit('ClickButton');
+                console.log("Abriendo sitio web");
+                setTimeout(loadURI("http://localhost:3000"), 1000);
+              }
+
+          	</script>
+<!-- -->
+
+
+      <!-- Camera + cursor.-->
+      <a-camera>
+        <a-cursor material="opacity: 0"></a-cursor>
+        <a-entity raycaster="interval: 500; objects: [gui-interactable]"
+        cursor="fuse: true; fuseTimeout: 2000"
+        gui-cursor="design:ring;" >
+       </a-entity> <!-- /cursor -->
+       </a-camera>
+
+
+
+         <a-sky  src="#sky" rotation="0 -90 0" scale="-1.2 1 1"></a-sky>
+    </a-scene>
+<!-- Fin A-frame -->
+
+
+  </body>
+
+</html>
